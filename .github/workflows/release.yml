@@ -3,29 +3,29 @@ name: Release
 on:
   push:
     tags:
-     - 'v*'
+      - 'v*'
 
 jobs:
   build-and-release:
-  runs-on: macos-latest
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    
-    - name: Select Xcode 12
-      uses: devbotsxyz/xcode-select@v1
-      with:
-        version: "12"
-    
-    - name: Build
-      run: xcodebuild -configuration Release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Select Xcode 12
+        uses: devbotsxyz/xcode-select@v1
+        with:
+          version: "12"
+      
+      - name: Build
+        run: xcodebuild -configuration Release
 
-    - name: Package
-      run: zip -rj ComboJack-Release-${{ github.ref }}.zip scripts/* build/Release/ComboJack-Swift
+      - name: Package
+        run: zip -rj ComboJack-Release-${{ github.ref }}.zip scripts/* build/Release/ComboJack-Swift
 
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: ComboJack-Release-${{ github.ref }}.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ComboJack-Release-${{ github.ref }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
