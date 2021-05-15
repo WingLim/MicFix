@@ -5,10 +5,10 @@
 	<key>KeepAlive</key>
 	<true/>
 	<key>Label</key>
-	<string>com.WingLim.ComboJack-Swift</string>
+	<string>com.WingLim.MicFix</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/usr/local/bin/ComboJack-Swift</string>
+		<string>/usr/local/bin/MicFix</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>
