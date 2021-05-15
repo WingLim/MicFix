@@ -29,8 +29,6 @@
 /* Begin PBXFileReference section */
 		833E6D6C264E674F003CE5DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		838773F3264FA71A00964D77 /* HDAVerb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HDAVerb.swift; sourceTree = "<group>"; };
-		838773FD264FB4EB00964D77 /* install.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = install.sh; sourceTree = "<group>"; };
-		838773FF264FB54100964D77 /* com.WingLim.ComboJakc-Swift.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com.WingLim.ComboJakc-Swift.plist"; sourceTree = "<group>"; };
 		83BCA9D8264DB1DB0084B7C4 /* ComboJack-Swift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ComboJack-Swift"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83BCA9DB264DB1DB0084B7C4 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		83BCA9E3264E41B70084B7C4 /* ComboJack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboJack.swift; sourceTree = "<group>"; };
@@ -48,15 +46,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		838773FB264FB22100964D77 /* Misc */ = {
-			isa = PBXGroup;
-			children = (
-				838773FD264FB4EB00964D77 /* install.sh */,
-				838773FF264FB54100964D77 /* com.WingLim.ComboJakc-Swift.plist */,
-			);
-			path = Misc;
-			sourceTree = "<group>";
-		};
 		83BCA9CF264DB1DB0084B7C4 = {
 			isa = PBXGroup;
 			children = (
@@ -76,7 +65,6 @@
 		83BCA9DA264DB1DB0084B7C4 /* ComboJack-Swift */ = {
 			isa = PBXGroup;
 			children = (
-				838773FB264FB22100964D77 /* Misc */,
 				838773F3264FA71A00964D77 /* HDAVerb.swift */,
 				83BCA9DB264DB1DB0084B7C4 /* main.swift */,
 				83BCA9E3264E41B70084B7C4 /* ComboJack.swift */,
