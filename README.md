@@ -4,6 +4,22 @@
 
 Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
 
+## Usage
+
+Download the newest release, unzip it.
+
+### Install
+
+```bash
+bash install.sh
+```
+
+### Uninsatll
+
+```bash
+bash install.sh uninstall
+```
+
 ## Features
 
 - Supports headset plug/unplug.
