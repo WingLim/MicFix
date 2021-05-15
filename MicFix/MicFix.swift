@@ -1,6 +1,6 @@
 //
-//  ComboJack.swift
-//  ComboJack-Swift
+//  MicFix.swift
+//  MicFix
 //
 //  Created by WingLim on 2021/5/14.
 //
@@ -8,7 +8,7 @@
 import Foundation
 
 
-class ComboJack {
+class MicFix {
     let listener = Listener()
     var ALCVerbIOService: io_service_t = 0
     var codecID = ""
@@ -38,7 +38,7 @@ class ComboJack {
         
         alcInit()
         
-        listener.combojack = self
+        listener.micfix = self
         listener.listen()
     }
     
@@ -197,8 +197,8 @@ class ComboJack {
         return writeCoefEX(nid: UInt32(REALTEK_VENDOR_REGISTERS), idx: idx, value: value)
     }
     
-    /// Headset: CTIA (iPhone-style plug)
-    private func headsetCTIA() {
+    /// Mic: CTIA (iPhone-style plug)
+    private func micCTIA() {
         print("Jack Status: headset (CTIA/iPhone) plugged in.\n")
         
         switch codecID {
@@ -211,8 +211,8 @@ class ComboJack {
     }
     
     
-    /// Headset: OMTP (Nokia-style plug)
-    private func headsetOMTP() {
+    /// Mic: OMTP (Nokia-style plug)
+    private func micOMTP() {
         print("Jack Status: headset (OMTP/Nokia) plugged in.\n")
         switch codecID {
         case ALC255:
@@ -224,8 +224,8 @@ class ComboJack {
     }
     
     
-    /// Headset Auto-Detection (CTIA/OMTP)
-    func headSetCheck() {
+    /// Mic Auto-Detection (CTIA/OMTP)
+    func micCheck() {
         print("Jack Status: headset plugged in. Checking type...\n")
         var setCoefIndex = HDAVerbIOCtl()
         var getProcCoef = HDAVerbIOCtl()
@@ -246,9 +246,9 @@ class ComboJack {
         }
         
         if getProcCoef.res & 0x0070 == 0x0070 {
-            headsetCTIA()
+            micCTIA()
         } else {
-            headsetOMTP()
+            micOMTP()
         }
     }
     

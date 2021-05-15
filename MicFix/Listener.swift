@@ -1,6 +1,6 @@
 //
 //  Listener.swift
-//  ComboJack-Swift
+//  MicFix
 //
 //  Created by WingLim on 2021/5/14.
 //
@@ -16,7 +16,7 @@ class Listener {
     private var dataSourceID: UInt32 = 0
     private var dataSourceSize = UInt32(MemoryLayout<UInt32>.size)
     
-    var combojack: ComboJack?
+    var micfix: MicFix?
     
     private var defaultAddr = AudioObjectPropertyAddress(
         mSelector: kAudioHardwarePropertyDefaultOutputDevice,
@@ -39,7 +39,7 @@ class Listener {
         // Detect jack status when program start listenning
         AudioObjectGetPropertyData(defaultDevice, &sourceAddr, 0, nil, &dataSourceSize, &dataSourceID)
         if dataSourceID == HEADPHONE {
-            _ = combojack?.headSetCheck()
+            _ = micfix?.micCheck()
         }
         AudioObjectAddPropertyListenerBlock(defaultDevice, &sourceAddr, .main, outputPropertyListenerBlock)
     }
@@ -48,11 +48,11 @@ class Listener {
         AudioObjectGetPropertyData(defaultDevice, inAddresses, 0, nil, &dataSourceSize, &dataSourceID)
         
         if dataSourceID == HEADPHONE {
-            _ = combojack?.headSetCheck()
+            _ = micfix?.micCheck()
         }
         
         if dataSourceID == SPEAKER {
-            _ = combojack?.unplugged()
+            _ = micfix?.unplugged()
         }
     }
     

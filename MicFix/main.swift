@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  ComboJack-Swift
+//  MicFix
 //
 //  Created by WingLim on 2021/5/14.
 //
@@ -8,8 +8,8 @@
 import Foundation
 
 func start() {
-    ComboJack().start()
+    MicFix().start()
     RunLoop.current.run()
 }
 
- start()
+start()
