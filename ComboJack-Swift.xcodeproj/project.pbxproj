@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		833E6D6D264E674F003CE5DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833E6D6C264E674F003CE5DD /* Constants.swift */; };
+		838773F4264FA71A00964D77 /* HDAVerb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838773F3264FA71A00964D77 /* HDAVerb.swift */; };
 		83BCA9DC264DB1DB0084B7C4 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BCA9DB264DB1DB0084B7C4 /* main.swift */; };
+		83BCA9E4264E41B70084B7C4 /* ComboJack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BCA9E3264E41B70084B7C4 /* ComboJack.swift */; };
+		83BCA9E7264E42510084B7C4 /* Listener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BCA9E6264E42510084B7C4 /* Listener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +27,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		83BCA9D8264DB1DB0084B7C4 /* ComboJack */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComboJack; sourceTree = BUILT_PRODUCTS_DIR; };
+		833E6D6C264E674F003CE5DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		838773F3264FA71A00964D77 /* HDAVerb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HDAVerb.swift; sourceTree = "<group>"; };
+		83BCA9D8264DB1DB0084B7C4 /* ComboJack-Swift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ComboJack-Swift"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83BCA9DB264DB1DB0084B7C4 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		83BCA9E3264E41B70084B7C4 /* ComboJack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboJack.swift; sourceTree = "<group>"; };
+		83BCA9E6264E42510084B7C4 /* Listener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Listener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +49,7 @@
 		83BCA9CF264DB1DB0084B7C4 = {
 			isa = PBXGroup;
 			children = (
-				83BCA9DA264DB1DB0084B7C4 /* ComboJack */,
+				83BCA9DA264DB1DB0084B7C4 /* ComboJack-Swift */,
 				83BCA9D9264DB1DB0084B7C4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,25 +57,29 @@
 		83BCA9D9264DB1DB0084B7C4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				83BCA9D8264DB1DB0084B7C4 /* ComboJack */,
+				83BCA9D8264DB1DB0084B7C4 /* ComboJack-Swift */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		83BCA9DA264DB1DB0084B7C4 /* ComboJack */ = {
+		83BCA9DA264DB1DB0084B7C4 /* ComboJack-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				838773F3264FA71A00964D77 /* HDAVerb.swift */,
 				83BCA9DB264DB1DB0084B7C4 /* main.swift */,
+				83BCA9E3264E41B70084B7C4 /* ComboJack.swift */,
+				83BCA9E6264E42510084B7C4 /* Listener.swift */,
+				833E6D6C264E674F003CE5DD /* Constants.swift */,
 			);
-			path = ComboJack;
+			path = "ComboJack-Swift";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		83BCA9D7264DB1DB0084B7C4 /* ComboJack */ = {
+		83BCA9D7264DB1DB0084B7C4 /* ComboJack-Swift */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 83BCA9DF264DB1DB0084B7C4 /* Build configuration list for PBXNativeTarget "ComboJack" */;
+			buildConfigurationList = 83BCA9DF264DB1DB0084B7C4 /* Build configuration list for PBXNativeTarget "ComboJack-Swift" */;
 			buildPhases = (
 				83BCA9D4264DB1DB0084B7C4 /* Sources */,
 				83BCA9D5264DB1DB0084B7C4 /* Frameworks */,
@@ -77,9 +89,9 @@
 			);
 			dependencies = (
 			);
-			name = ComboJack;
+			name = "ComboJack-Swift";
 			productName = ComboJack;
-			productReference = 83BCA9D8264DB1DB0084B7C4 /* ComboJack */;
+			productReference = 83BCA9D8264DB1DB0084B7C4 /* ComboJack-Swift */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -96,7 +108,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83BCA9D3264DB1DB0084B7C4 /* Build configuration list for PBXProject "ComboJack" */;
+			buildConfigurationList = 83BCA9D3264DB1DB0084B7C4 /* Build configuration list for PBXProject "ComboJack-Swift" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -109,7 +121,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				83BCA9D7264DB1DB0084B7C4 /* ComboJack */,
+				83BCA9D7264DB1DB0084B7C4 /* ComboJack-Swift */,
 			);
 		};
 /* End PBXProject section */
@@ -119,7 +131,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				833E6D6D264E674F003CE5DD /* Constants.swift in Sources */,
 				83BCA9DC264DB1DB0084B7C4 /* main.swift in Sources */,
+				83BCA9E7264E42510084B7C4 /* Listener.swift in Sources */,
+				838773F4264FA71A00964D77 /* HDAVerb.swift in Sources */,
+				83BCA9E4264E41B70084B7C4 /* ComboJack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +282,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		83BCA9D3264DB1DB0084B7C4 /* Build configuration list for PBXProject "ComboJack" */ = {
+		83BCA9D3264DB1DB0084B7C4 /* Build configuration list for PBXProject "ComboJack-Swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83BCA9DD264DB1DB0084B7C4 /* Debug */,
@@ -275,7 +291,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83BCA9DF264DB1DB0084B7C4 /* Build configuration list for PBXNativeTarget "ComboJack" */ = {
+		83BCA9DF264DB1DB0084B7C4 /* Build configuration list for PBXNativeTarget "ComboJack-Swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83BCA9E0264DB1DB0084B7C4 /* Debug */,
