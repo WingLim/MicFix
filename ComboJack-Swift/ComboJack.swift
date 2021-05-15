@@ -42,9 +42,8 @@ class ComboJack {
         listener.listen()
     }
     
-    
     /// Open connection to IOService
-    func openServiceConnection() {
+    private func openServiceConnection() {
         guard kIOReturnSuccess == IOServiceOpen(ALCVerbIOService, mach_task_self_, 0, &DataConnection),
               DataConnection != 0 else {
             print("Failed to connect to ALCUserClientProvider")
@@ -56,7 +55,7 @@ class ComboJack {
     /// Send verb command
     /// - Parameter command: verb command
     /// - Returns: execute output
-    func sendHdaVerb(_ command: UInt32) -> UInt32 {
+    private func sendHdaVerb(_ command: UInt32) -> UInt32 {
         let nid = command >> 20
         let verb = (command >> 8) & 0xFFF
         let param = command & 0xFF
@@ -82,7 +81,7 @@ class ComboJack {
     
     
     /// Get onboard audio device info
-    func getAudioID() {
+    private func getAudioID() {
         var HDACodecDevIOService: io_service_t = 0
         var HDACtrlIOService: io_service_t = 0
         var pciDevIOService: io_service_t = 0
@@ -131,7 +130,7 @@ class ComboJack {
     /// Convert CFData to Hex string
     /// - Parameter data: CFData
     /// - Returns: String with Hex format
-    func getCFDataString(data: CFData) -> String {
+    private func getCFDataString(data: CFData) -> String {
         let n = CFDataGetLength(data)
         var buffer = [UInt8](repeating: 0, count: n)
         CFDataGetBytes(data, CFRangeMake(0, n), &buffer)
@@ -147,7 +146,7 @@ class ComboJack {
     
     
     /// Codec fixup, invoked when boot/wake
-    func alcInit() {
+    private func alcInit() {
         print("Init codec\n")
         switch codecID {
         case ALC255:
@@ -199,7 +198,7 @@ class ComboJack {
     }
     
     /// Headset: CTIA (iPhone-style plug)
-    func headsetCTIA() {
+    private func headsetCTIA() {
         print("Jack Status: headset (CTIA/iPhone) plugged in.\n")
         
         switch codecID {
@@ -213,7 +212,7 @@ class ComboJack {
     
     
     /// Headset: OMTP (Nokia-style plug)
-    func headsetOMTP() {
+    private func headsetOMTP() {
         print("Jack Status: headset (OMTP/Nokia) plugged in.\n")
         switch codecID {
         case ALC255:
