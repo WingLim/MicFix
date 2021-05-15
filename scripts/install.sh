@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #  install.sh
 #  MicFix
@@ -16,7 +16,7 @@ function cleanUpOldInstall() {
 
 # Function that exits with an error code and message
 function abort() {
-    echo $1
+    echo "$1"
     exit 1
 }
 
@@ -24,7 +24,7 @@ function abort() {
 if [[ $EUID -ne 0 ]];
 then
     exec sudo /bin/bash "$0" "$@"
-f
+fi
 
 echo "Removing old installs"
 cleanUpOldInstall 2>/dev/null
