@@ -18,15 +18,26 @@ jobs:
           version: "12"
       
       - name: Build binary
-        run: xcodebuild -configuration Release
+        run: xcodebuild archive -scheme ComboJack-Swift -archivePath build
+
+      - name: Set version
+        id: version
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
       - name: Package to zip
-        run: zip -rj ComboJack-Release-${GITHUB_REF##*/}.zip scripts/* ComboJack-Swift/build/Release/ComboJack-Swift
+        id: zip
+        run: |
+          dir=ComboJack-Swift-Release-${{ steps.version.outputs.tag }}
+          echo ::set-output name=filename::${dir}
+          mkdir ${dir}
+          cp build.xcarchive/Products/ComboJack-Swift ${dir}
+          cp scripts/* ${dir}
+          zip -r ${dir}.zip ${dir}
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ComboJack-Release-${GITHUB_REF##*/}.zip
+          files: ${{ steps.zip.outputs.filename }}.zip
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
