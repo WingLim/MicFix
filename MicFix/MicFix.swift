@@ -20,6 +20,7 @@ class MicFix {
         var iterator: io_iterator_t = 0
         IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(ALCVERB_PROVIDER), &iterator)
         
+        // Find supported device
         repeat {
             ALCVerbIOService = IOIteratorNext(iterator)
             getAudioID()
@@ -57,7 +58,7 @@ class MicFix {
     /// Send verb command
     /// - Parameter command: verb command
     /// - Returns: execute output
-    private func sendHdaVerb(_ command: UInt32) -> Int32 {
+    private func sendHDAVerb(_ command: UInt32) -> Int32 {
         let nid = command >> 20
         let verb = (command >> 8) & 0xFFF
         let param = command & 0xFF
@@ -71,6 +72,7 @@ class MicFix {
         var outputCount: UInt32 = 1
         var output: UInt64 = 0
         
+        // Send verb command from user space to AppleALC kernel space
         if kIOReturnSuccess != IOConnectCallScalarMethod(DataConnection, 0, &input, 3, &output, &outputCount) {
             print("Failed to execute HDA verb\n")
             return -1
@@ -152,9 +154,9 @@ class MicFix {
         print("Init codec\n")
         switch codecID {
         case ALC255:
-            _ = sendHdaVerb(HDAVerb(nid: 0x19, verb: SET_PIN_WIDGET_CONTROL, param: 0x24))
-            _ = sendHdaVerb(HDAVerb(nid: 0x1a, verb: SET_PIN_WIDGET_CONTROL, param: 0x20))
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_UNSOLICITED_ENABLE, param: 0x83))
+            _ = sendHDAVerb(HDAVerb(0x19, SET_PIN_WIDGET_CONTROL, 0x24))
+            _ = sendHDAVerb(HDAVerb(0x1a, SET_PIN_WIDGET_CONTROL, 0x20))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_UNSOLICITED_ENABLE, 0x83))
         default: break
         }
     }
@@ -166,8 +168,8 @@ class MicFix {
     private func alcReadCoefEX(nid: UInt32, idx: UInt32) -> Int32 {
         var val: Int32 = 0
         
-        _ = sendHdaVerb(HDAVerb(nid: nid, verb: SET_COEF_INDEX, param: idx))
-        val = sendHdaVerb(HDAVerb(nid: nid, verb: GET_PROC_COEF, param: idx))
+        _ = sendHDAVerb(HDAVerb(nid, SET_COEF_INDEX, idx))
+        val = sendHDAVerb(HDAVerb(nid, GET_PROC_COEF, idx))
         
         return val
     }
@@ -177,8 +179,8 @@ class MicFix {
     }
     
     private func alcWriteCoefEX(nid: UInt32, idx: UInt32, value: UInt32) {
-        _ = sendHdaVerb(HDAVerb(nid: nid, verb: SET_COEF_INDEX, param: idx))
-        _ = sendHdaVerb(HDAVerb(nid: nid, verb: SET_PROC_COEF, param: value))
+        _ = sendHDAVerb(HDAVerb(nid, SET_COEF_INDEX, idx))
+        _ = sendHDAVerb(HDAVerb(nid, SET_PROC_COEF, value))
     }
     
     private func alcUpdateCoef(idx: UInt32, mask: Int32, value: UInt32) {
@@ -229,7 +231,6 @@ class MicFix {
         
         switch codecID {
         case ALC255:
-            // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5026
             alcProcessCoef(coefArray: coef0255)
         case ALC236, ALC256:
             alcProcessCoef(coefArray: coef0256)
@@ -277,7 +278,6 @@ class MicFix {
         
         switch codecID {
         case ALC255:
-            // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5144
             alcProcessCoef(coefArray: coef0255)
         case ALC236, ALC256:
             alcProcessCoef(coefArray: coef0256)
@@ -327,10 +327,10 @@ class MicFix {
             alcWriteCoef(idx: 0x1b, value: 0x0e4b)
             alcWriteCoef(idx: 0x06, value: 0x6104)
             alcWriteCoefEX(nid: 0x57, idx: 0x3, value: 0x09a3)
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_MUTE))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_AMP_GAIN_MUTE, AMP_OUT_MUTE))
             usleep(80000)
             
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: 0x0))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_PIN_WIDGET_CONTROL, 0x0))
             alcProcessCoef(coefArray: coef0255)
             usleep(350000)
             val = alcReadCoef(idx: 0x46)
@@ -338,18 +338,18 @@ class MicFix {
             
             alcWriteCoefEX(nid: 0x57, idx: 0x3, value: 0x0da3)
             alcUpdateCoefEX(nid: 0x57, index: 0x5, mask: 1<<14, value: 0)
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: PIN_OUT))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_PIN_WIDGET_CONTROL, PIN_OUT))
             usleep(80000)
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_UNMUTE))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_AMP_GAIN_MUTE, AMP_OUT_UNMUTE))
         case ALC286, ALC288:
             alcProcessCoef(coefArray: coef0288)
             usleep(350000)
             val = alcReadCoef(idx: 0x50)
             isCTIA = (val & 0x0070) == 0x0070
         case ALC298:
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_MUTE))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_AMP_GAIN_MUTE, AMP_OUT_MUTE))
             usleep(100000)
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: 0x0))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_PIN_WIDGET_CONTROL, 0x0))
             usleep(200000)
             
             val = alcReadCoef(idx: 0x50)
@@ -367,9 +367,9 @@ class MicFix {
                 isCTIA = (val & 0x0070) == 0x0070
             }
             alcProcessCoef(coefArray: coef0298)
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: PIN_HP))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_PIN_WIDGET_CONTROL, PIN_HP))
             usleep(75000)
-            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_UNMUTE))
+            _ = sendHDAVerb(HDAVerb(0x21, SET_AMP_GAIN_MUTE, AMP_OUT_UNMUTE))
         default: break
         }
         

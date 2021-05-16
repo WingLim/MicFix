@@ -30,6 +30,6 @@ func writeCoef(_ idx: UInt32, _ val: UInt32) -> coef {
     return writeCoefEX(REALTEK_VENDOR_REGISTERS, idx, val)
 }
 
-func HDAVerb(nid: UInt32, verb: UInt32, param: UInt32) -> UInt32 {
+func HDAVerb(_ nid: UInt32, _ verb: UInt32, _ param: UInt32) -> UInt32 {
     return nid << 20 | verb << 8 | param
 }
