@@ -29,6 +29,8 @@ class MicFix {
             }
         } while !SUPPORTED_DEVICES.contains(codecID)
         
+        print(String(format: "CodecID: %@\n", codecID))
+        
         openServiceConnection()
         
         if !SUPPORTED_DEVICES.contains(codecID) {
