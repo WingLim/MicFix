@@ -33,7 +33,7 @@ bash install.sh uninstall
 
 The hda-verb command comes from [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c), but because of the limited devices, only some of them were tested on MacOS.
 
-I'd appreciate it if someone could help me test the devices.
+We would appreciate it if someone could help us test these devices.
 
 - ALC236
 - ALC255[Tested]
@@ -44,5 +44,5 @@ I'd appreciate it if someone could help me test the devices.
 
 ## Credits
 
-- [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c) fro most of the hda-verb command.
+- [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c) for most of the hda-verb command.
 - [ComboJack](https://github.com/hackintosh-stuff/ComboJack) for inspiring this project.
