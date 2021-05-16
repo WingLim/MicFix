@@ -192,16 +192,30 @@ class MicFix {
         }
     }
     
+    private func alcProcessCoef(coefArray: [coef]) {
+        for item in coefArray {
+            if item.mask == -1 {
+                alcWriteCoefEX(nid: item.nid, idx: item.idx, value: item.val)
+            } else {
+                alcUpdateCoefEX(nid: item.nid, index: item.idx, mask: item.mask, value: item.val)
+            }
+        }
+    }
+    
     /// Mic: CTIA (iPhone-style plug)
     private func micCTIA() {
         print("Jack Status: headset (CTIA/iPhone) plugged in.\n")
         
+        let coef0255: [coef] = [
+            writeCoef(0x45, 0xd489),
+            writeCoef(0x1b, 0x0c2b),
+            writeCoefEX(0x57, 0x03, 0x8ea6)
+        ]
+        
         switch codecID {
         case ALC255:
             // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5026
-            alcWriteCoef(idx: 0x45, value: 0xd489)
-            alcWriteCoef(idx: 0x1b, value: 0x0c2b)
-            alcWriteCoefEX(nid: 0x57, idx: 0x03, value: 0x8ea6)
+            alcProcessCoef(coefArray: coef0255)
         default: break
         }
     }
@@ -210,12 +224,17 @@ class MicFix {
     /// Mic: OMTP (Nokia-style plug)
     private func micOMTP() {
         print("Jack Status: headset (OMTP/Nokia) plugged in.\n")
+        
+        let coef0255: [coef] = [
+            writeCoef(0x45, 0xe489),
+            writeCoef(0x1b, 0x0c2b),
+            writeCoefEX(0x57, 0x03, 0x8ea6)
+        ]
+        
         switch codecID {
         case ALC255:
             // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5144
-            alcWriteCoef(idx: 0x45, value: 0xe489)
-            alcWriteCoef(idx: 0x1b, value: 0x0c2b)
-            alcWriteCoefEX(nid: 0x57, idx: 0x03, value: 0x8ea6)
+            alcProcessCoef(coefArray: coef0255)
         default: break
         }
     }
@@ -227,12 +246,14 @@ class MicFix {
         var isCTIA = false
         var val: Int32 = 0
         
+        let coef0255: [coef] = [
+            writeCoef(0x45, 0x0d089),
+            writeCoef(0x49, 0x0149)
+        ]
+        
         switch codecID {
         case ALC255:
-            _ = sendHdaVerb(HDAVerb(nid: 0x19, verb: SET_PIN_WIDGET_CONTROL, param: 0x24))
-            // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5245
-            alcWriteCoef(idx: 0x45, value: 0xd089)
-            alcWriteCoef(idx: 0x49, value: 0x0149)
+            alcProcessCoef(coefArray: coef0255)
             usleep(350000)
             val = alcReadCoef(idx: 0x46)
             isCTIA = (val & 0x0070) == 0x0070
