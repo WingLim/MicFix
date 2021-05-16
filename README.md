@@ -4,6 +4,11 @@
 
 Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
 
+## Features
+
+- Supports headset plug/unplug.
+- Doesn't require `CodecCommander`, `hda-verb` or `alc-verb` to function.
+
 ## Usage
 
 Note: Requires AppleALC version 1.5.4+ or the patch of commit [61e2bbf](https://github.com/acidanthera/AppleALC/commit/61e2bbfe74bf1c12ebf770ed4a9776a04a7758f2) applied.
@@ -24,14 +29,9 @@ bash install.sh
 bash install.sh uninstall
 ```
 
-## Features
-
-- Supports headset plug/unplug.
-- Doesn't require `CodecCommander`, `hda-verb` or `alc-verb` to function.
-
 ## Supported Devices
 
-The hda-verb command comes from [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c) and [ComboJack](https://github.com/hackintosh-stuff/ComboJack), but because of the limited devices, only some of them were tested on MacOS.
+The hda-verb command comes from [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c), but because of the limited devices, only some of them were tested on MacOS.
 
 I'd appreciate it if someone could help me test the devices.
 
