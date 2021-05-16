@@ -6,9 +6,11 @@ Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
 
 ## Usage
 
-Download the newest release, unzip it.
-
 Note: Requires AppleALC version 1.5.4+ or the patch of commit [61e2bbf](https://github.com/acidanthera/AppleALC/commit/61e2bbfe74bf1c12ebf770ed4a9776a04a7758f2) applied.
+
+1. Add AppleALC to your OpenCore
+2. Enable `alcverbs` by adding `alcverbs=1` to NVRAM->`7C436110-AB2A-4BBB-A880-FE41995C9F82`->`boot-args`
+3. Download the newest release, unzip it.
 
 ### Install
 
