@@ -55,7 +55,7 @@ class MicFix {
     /// Send verb command
     /// - Parameter command: verb command
     /// - Returns: execute output
-    private func sendHdaVerb(_ command: UInt32) -> UInt32 {
+    private func sendHdaVerb(_ command: UInt32) -> Int32 {
         let nid = command >> 20
         let verb = (command >> 8) & 0xFFF
         let param = command & 0xFF
@@ -71,12 +71,12 @@ class MicFix {
         
         if kIOReturnSuccess != IOConnectCallScalarMethod(DataConnection, 0, &input, 3, &output, &outputCount) {
             print("Failed to execute HDA verb\n")
-            return 1
+            return -1
         }
         
         // print(String(format: "%x, %x, %llx", arguments: [nid, verb, output]))
         
-        return UInt32(output)
+        return Int32(output)
     }
     
     
@@ -157,44 +157,39 @@ class MicFix {
         }
     }
     
-    private func updateCoefEX(nid: UInt32, index: UInt32, value: UInt32) -> Int32 {
-        var setCoefIndex = HDAVerbIOCtl()
-        var getProcCoef = HDAVerbIOCtl()
-        var setProcCoef = HDAVerbIOCtl()
-        
-        setCoefIndex.verb = HDAVerb(nid: nid, verb: SET_COEF_INDEX, param: index)
-        setCoefIndex.res = sendHdaVerb(setCoefIndex.verb)
-        if setCoefIndex.res != 0 {
-            print("Received weird response.")
-            return -1
-        }
-        
-        getProcCoef.verb = HDAVerb(nid: nid, verb: GET_PROC_COEF, param: 0x00)
-        getProcCoef.res = sendHdaVerb(getProcCoef.verb)
-        
-        if value != getProcCoef.res {
-            setCoefIndex.res = sendHdaVerb(setCoefIndex.verb)
-            
-            setProcCoef.verb = HDAVerb(nid: nid, verb: SET_PROC_COEF, param: value)
-            setProcCoef.res = sendHdaVerb(setProcCoef.verb)
-            if setProcCoef.res != 0 {
-                print("Received strange response")
-                return -1
-            }
-        }
-        
-        setCoefIndex.res = sendHdaVerb(setCoefIndex.verb)
-        getProcCoef.res = sendHdaVerb(getProcCoef.verb)
-        
-        return Int32(getProcCoef.res)
+    private func readCoef(idx: UInt32) -> Int32 {
+        return readCoefEX(nid: REALTEK_VENDOR_REGISTERS, idx: idx)
     }
     
-    private func writeCoefEX(nid: UInt32, idx: UInt32, value: UInt32) -> Int32 {
-        return updateCoefEX(nid: nid, index: idx, value: value)
+    private func readCoefEX(nid: UInt32, idx: UInt32) -> Int32 {
+        var val: Int32 = 0
+        
+        _ = sendHdaVerb(HDAVerb(nid: nid, verb: SET_COEF_INDEX, param: idx))
+        val = sendHdaVerb(HDAVerb(nid: nid, verb: GET_PROC_COEF, param: idx))
+        
+        return val
     }
     
-    private func writeCoef(idx: UInt32, value: UInt32) -> Int32 {
-        return writeCoefEX(nid: UInt32(REALTEK_VENDOR_REGISTERS), idx: idx, value: value)
+    private func writeCoef(idx: UInt32, value: UInt32) {
+        writeCoefEX(nid: REALTEK_VENDOR_REGISTERS, idx: idx, value: value)
+    }
+    
+    private func writeCoefEX(nid: UInt32, idx: UInt32, value: UInt32) {
+        _ = sendHdaVerb(HDAVerb(nid: nid, verb: SET_COEF_INDEX, param: idx))
+        _ = sendHdaVerb(HDAVerb(nid: nid, verb: SET_PROC_COEF, param: value))
+    }
+    
+    private func updateCoef(idx: UInt32, mask: Int32, value: UInt32) {
+        updateCoefEX(nid: REALTEK_VENDOR_REGISTERS, index: idx, mask: mask, value: value)
+    }
+    
+    private func updateCoefEX(nid: UInt32, index: UInt32, mask: Int32, value: UInt32) {
+        let val = readCoefEX(nid: nid, idx: index)
+        let tmp = Int32(value)
+        
+        if val != -1 {
+            writeCoefEX(nid: nid, idx: index, value: UInt32((val & ~mask) | tmp))
+        }
     }
     
     /// Mic: CTIA (iPhone-style plug)
@@ -203,9 +198,10 @@ class MicFix {
         
         switch codecID {
         case ALC255:
-            _ = writeCoef(idx: 0x45, value: 0xd489)
-            _ = writeCoef(idx: 0x1b, value: 0x0c2b)
-            _ = writeCoefEX(nid: 0x57, idx: 0x03, value: 0x8ea6)
+            // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5026
+            writeCoef(idx: 0x45, value: 0xd489)
+            writeCoef(idx: 0x1b, value: 0x0c2b)
+            writeCoefEX(nid: 0x57, idx: 0x03, value: 0x8ea6)
         default: break
         }
     }
@@ -216,9 +212,10 @@ class MicFix {
         print("Jack Status: headset (OMTP/Nokia) plugged in.\n")
         switch codecID {
         case ALC255:
-            _ = writeCoef(idx: 0x45, value: 0xe489)
-            _ = writeCoef(idx: 0x1b, value: 0x0c2b)
-            _ = writeCoefEX(nid: 0x57, idx: 0x03, value: 0x8ea6)
+            // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5144
+            writeCoef(idx: 0x45, value: 0xe489)
+            writeCoef(idx: 0x1b, value: 0x0c2b)
+            writeCoefEX(nid: 0x57, idx: 0x03, value: 0x8ea6)
         default: break
         }
     }
@@ -227,25 +224,22 @@ class MicFix {
     /// Mic Auto-Detection (CTIA/OMTP)
     func micCheck() {
         print("Jack Status: headset plugged in. Checking type...\n")
-        var setCoefIndex = HDAVerbIOCtl()
-        var getProcCoef = HDAVerbIOCtl()
-        
-        let nid = REALTEK_VENDOR_REGISTERS
+        var isCTIA = false
+        var val: Int32 = 0
         
         switch codecID {
         case ALC255:
             _ = sendHdaVerb(HDAVerb(nid: 0x19, verb: SET_PIN_WIDGET_CONTROL, param: 0x24))
-            _ = writeCoef(idx: 0x45, value: 0xd089)
-            _ = writeCoef(idx: 0x49, value: 0x0149)
+            // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5245
+            writeCoef(idx: 0x45, value: 0xd089)
+            writeCoef(idx: 0x49, value: 0x0149)
             usleep(350000)
-            setCoefIndex.verb = HDAVerb(nid: nid, verb: SET_COEF_INDEX, param: 0x46)
-            setCoefIndex.res = sendHdaVerb(setCoefIndex.verb)
-            getProcCoef.verb = HDAVerb(nid: nid, verb: GET_PROC_COEF, param: 0x46)
-            getProcCoef.res = sendHdaVerb(getProcCoef.verb)
+            val = readCoef(idx: 0x46)
+            isCTIA = (val & 0x0070) == 0x0070
         default: break
         }
         
-        if getProcCoef.res & 0x0070 == 0x0070 {
+        if isCTIA {
             micCTIA()
         } else {
             micOMTP()
@@ -258,11 +252,11 @@ class MicFix {
         print("Jack Status: unplugged.\n")
         switch codecID {
         case ALC255:
-            _ = writeCoef(idx: 0x1b, value: 0x0c0b)
-            _ = writeCoef(idx: 0x45, value: 0xd089)
-            _ = updateCoefEX(nid: 0x57, index: 0x05, value: 0)
-            _ = writeCoef(idx: 0x06, value: 0x6104)
-            _ = writeCoefEX(nid: 0x57, idx: 0x03, value: 0x8aa6)
+            writeCoef(idx: 0x1b, value: 0x0c0b)
+            writeCoef(idx: 0x45, value: 0xd089)
+            updateCoefEX(nid: 0x57, index: 0x05, mask: 1<<14, value: 0)
+            writeCoef(idx: 0x06, value: 0x6104)
+            writeCoefEX(nid: 0x57, idx: 0x03, value: 0x8aa6)
         default: break
         }
     }
