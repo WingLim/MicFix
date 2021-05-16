@@ -212,10 +212,17 @@ class MicFix {
             writeCoefEX(0x57, 0x03, 0x8ea6)
         ]
         
+        let coef0256: [coef] = [
+            writeCoef(0x45, 0xd489),
+            writeCoef(0x1b, 0x0e6b)
+        ]
+        
         switch codecID {
         case ALC255:
             // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5026
             alcProcessCoef(coefArray: coef0255)
+        case ALC236, ALC256:
+            alcProcessCoef(coefArray: coef0256)
         default: break
         }
     }
@@ -231,10 +238,17 @@ class MicFix {
             writeCoefEX(0x57, 0x03, 0x8ea6)
         ]
         
+        let coef0256: [coef] = [
+            writeCoef(0x45, 0xe489),
+            writeCoef(0x1b, 0x0e6b)
+        ]
+        
         switch codecID {
         case ALC255:
             // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5144
             alcProcessCoef(coefArray: coef0255)
+        case ALC236, ALC256:
+            alcProcessCoef(coefArray: coef0256)
         default: break
         }
     }
@@ -257,6 +271,24 @@ class MicFix {
             usleep(350000)
             val = alcReadCoef(idx: 0x46)
             isCTIA = (val & 0x0070) == 0x0070
+        case ALC236, ALC256:
+            alcWriteCoef(idx: 0x1b, value: 0x0e4b)
+            alcWriteCoef(idx: 0x06, value: 0x6104)
+            alcWriteCoefEX(nid: 0x57, idx: 0x3, value: 0x09a3)
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_MUTE))
+            usleep(80000)
+            
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: 0x0))
+            alcProcessCoef(coefArray: coef0255)
+            usleep(350000)
+            val = alcReadCoef(idx: 0x46)
+            isCTIA = (val & 0x0070) == 0x0070
+            
+            alcWriteCoefEX(nid: 0x57, idx: 0x3, value: 0x0da3)
+            alcUpdateCoefEX(nid: 0x57, index: 0x5, mask: 1<<14, value: 0)
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: PIN_OUT))
+            usleep(80000)
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_UNMUTE))
         default: break
         }
         
