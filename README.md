@@ -35,7 +35,12 @@ The hda-verb command comes from [patch_realtek.c](https://github.com/torvalds/li
 
 I'd appreciate it if someone could help me test the devices.
 
+- ALC236
 - ALC255[Tested]
+- ALC256
+- ALC286
+- ALC288
+- ALC298
 
 ## Credits
 
