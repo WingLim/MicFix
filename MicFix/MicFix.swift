@@ -205,6 +205,7 @@ class MicFix {
     /// Mic: CTIA (iPhone-style plug)
     private func micCTIA() {
         print("Jack Status: headset (CTIA/iPhone) plugged in.\n")
+        var val: Int32 = 0
         
         let coef0255: [coef] = [
             writeCoef(0x45, 0xd489),
@@ -217,12 +218,34 @@ class MicFix {
             writeCoef(0x1b, 0x0e6b)
         ]
         
+        let coef0288: [coef] = [
+            updateCoef(0x50, 0x2000, 0x2000),
+            updateCoef(0x56, 0x0006, 0x0006),
+            updateCoef(0x66, 0x0008, 0),
+            updateCoef(0x67, 0x2000, 0)
+        ]
+        
         switch codecID {
         case ALC255:
             // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5026
             alcProcessCoef(coefArray: coef0255)
         case ALC236, ALC256:
             alcProcessCoef(coefArray: coef0256)
+        case ALC286, ALC288:
+            alcUpdateCoef(idx: 0x4f, mask: 0xfcc0, value: 0xd400)
+            usleep(300000)
+            alcProcessCoef(coefArray: coef0288)
+        case ALC298:
+            val = alcReadCoef(idx: 0x50)
+            if (val & (1 << 12)) != 0 {
+                alcUpdateCoef(idx: 0x8e, mask: 0x0070, value: 0x0020)
+                alcUpdateCoef(idx: 0x4f, mask: 0xfcc0, value: 0xd400)
+                usleep(300000)
+            } else {
+                alcUpdateCoef(idx: 0x8e, mask: 0x0070, value: 0x0010)
+                alcUpdateCoef(idx: 0x4f, mask: 0xfcc0, value: 0xd400)
+                usleep(300000)
+            }
         default: break
         }
     }
@@ -243,12 +266,27 @@ class MicFix {
             writeCoef(0x1b, 0x0e6b)
         ]
         
+        let coef0288: [coef] = [
+            updateCoef(0x50, 0x2000, 0x2000),
+            updateCoef(0x56, 0x0006, 0x0006),
+            updateCoef(0x66, 0x0008, 0),
+            updateCoef(0x67, 0x2000, 0)
+        ]
+        
         switch codecID {
         case ALC255:
             // Comes from https://github.com/torvalds/linux/blob/63d1cb53e26a9a4168b84a8981b225c0a9cfa235/sound/pci/hda/patch_realtek.c#L5144
             alcProcessCoef(coefArray: coef0255)
         case ALC236, ALC256:
             alcProcessCoef(coefArray: coef0256)
+        case ALC286, ALC288:
+            alcUpdateCoef(idx: 0x4f, mask: 0xfcc0, value: 0xe400)
+            usleep(300000)
+            alcProcessCoef(coefArray: coef0288)
+        case ALC298:
+            alcUpdateCoef(idx: 0x8e, mask: 0x0070, value: 0x0010)
+            alcUpdateCoef(idx: 0x4f, mask: 0xfcc0, value: 0xe400)
+            usleep(300000)
         default: break
         }
     }
@@ -263,6 +301,18 @@ class MicFix {
         let coef0255: [coef] = [
             writeCoef(0x45, 0x0d089),
             writeCoef(0x49, 0x0149)
+        ]
+        
+        let coef0288: [coef] = [
+            updateCoef(0x4f, 0xfcc0, 0xd400)
+        ]
+        
+        let coef0298: [coef] = [
+            updateCoef(0x50, 0x2000, 0x2000),
+            updateCoef(0x56, 0x0006, 0x0006),
+            updateCoef(0x66, 0x0008, 0),
+            updateCoef(0x67, 0x2000, 0),
+            updateCoef(0x19, 0x1300, 0x1300)
         ]
         
         switch codecID {
@@ -289,6 +339,35 @@ class MicFix {
             _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: PIN_OUT))
             usleep(80000)
             _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_UNMUTE))
+        case ALC286, ALC288:
+            alcProcessCoef(coefArray: coef0288)
+            usleep(350000)
+            val = alcReadCoef(idx: 0x50)
+            isCTIA = (val & 0x0070) == 0x0070
+        case ALC298:
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_MUTE))
+            usleep(100000)
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: 0x0))
+            usleep(200000)
+            
+            val = alcReadCoef(idx: 0x50)
+            if (val & (1 << 12)) != 0 {
+                alcUpdateCoef(idx: 0x8e, mask: 0x0070, value: 0x0020)
+                alcProcessCoef(coefArray: coef0288)
+                usleep(350000)
+                val = alcReadCoef(idx: 0x50)
+                isCTIA = (val & 0x0070) == 0x0070
+            } else {
+                alcUpdateCoef(idx: 0x8e, mask: 0x0070, value: 0x0010)
+                alcProcessCoef(coefArray: coef0288)
+                usleep(350000)
+                val = alcReadCoef(idx: 0x50)
+                isCTIA = (val & 0x0070) == 0x0070
+            }
+            alcProcessCoef(coefArray: coef0298)
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_PIN_WIDGET_CONTROL, param: PIN_HP))
+            usleep(75000)
+            _ = sendHdaVerb(HDAVerb(nid: 0x21, verb: SET_AMP_GAIN_MUTE, param: AMP_OUT_UNMUTE))
         default: break
         }
         
@@ -303,13 +382,45 @@ class MicFix {
     /// Unplugged Settings
     func unplugged() {
         print("Jack Status: unplugged.\n")
+        
+        let coef0255: [coef] = [
+            writeCoef(0x1b, 0x0c0b),
+            writeCoef(0x45, 0x0d089),
+            updateCoefEX(0x57, 0x05, 1<<14, 0),
+            writeCoef(0x06, 0x06104),
+            writeCoefEX(0x57, 0x03, 0x8aa6)
+        ]
+        
+        let coef0256: [coef] = [
+            writeCoef(0x1b, 0x0c4b),
+            writeCoef(0x45, 0xd089),
+            writeCoef(0x06, 0x6104),
+            writeCoefEX(0x57, 0x03, 0x09a3),
+            updateCoefEX(0x57, 0x05, 1<<14, 0)
+        ]
+        
+        let coef0288: [coef] = [
+            updateCoef(0x4f, 0xfcc0, 0xc400),
+            updateCoef(0x50, 0x2000, 0x2000),
+            updateCoef(0x56, 0x0006, 0x0006),
+            updateCoef(0x66, 0x0008, 0),
+            updateCoef(0x67, 0x2000, 0)
+        ]
+        
+        let coef0298: [coef] = [
+            updateCoef(0x19, 0x1300, 0x0300)
+        ]
+        
         switch codecID {
         case ALC255:
-            alcWriteCoef(idx: 0x1b, value: 0x0c0b)
-            alcWriteCoef(idx: 0x45, value: 0xd089)
-            alcUpdateCoefEX(nid: 0x57, index: 0x05, mask: 1<<14, value: 0)
-            alcWriteCoef(idx: 0x06, value: 0x6104)
-            alcWriteCoefEX(nid: 0x57, idx: 0x03, value: 0x8aa6)
+            alcProcessCoef(coefArray: coef0255)
+        case ALC236, ALC256:
+            alcProcessCoef(coefArray: coef0256)
+        case ALC286, ALC288:
+            alcProcessCoef(coefArray: coef0288)
+        case ALC298:
+            alcProcessCoef(coefArray: coef0298)
+            alcProcessCoef(coefArray: coef0288)
         default: break
         }
     }
