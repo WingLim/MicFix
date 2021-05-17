@@ -11,8 +11,13 @@ jobs:
     env:
       PROGRAM: MicFix
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install git-chglog
+        run: |
+          brew tap git-chglog/git-chglog
+          brew install git-chglog
       
       - name: Select Xcode 12
         uses: devbotsxyz/xcode-select@v1
@@ -35,11 +40,15 @@ jobs:
           cp build.xcarchive/Products/${PROGRAM} ${dir}
           cp scripts/* ${dir}
           zip -r ${dir}.zip ${dir}
+      
+      - name: Generate changelog
+        run: git-chglog ${{ steps.version.outputs.tag }} -o ${{ github.workflow }}-CHANGELOG.md
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.zip.outputs.filename }}.zip
           draft: true
+          body_path: ${{ github.workflow }}-CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
