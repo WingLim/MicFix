@@ -4,6 +4,8 @@
 
 Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
 
+English | [中文](https://github.com/WingLim/MicFix/blob/main/README_CN.md)
+
 ## Features
 
 - Supports headset plug/unplug.
