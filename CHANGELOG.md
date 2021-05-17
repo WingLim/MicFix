@@ -1,4 +1,11 @@
 
+<a name="v1.1.1"></a>
+## [v1.1.1](https://github.com/WingLim/MicFix/compare/v1.1.0...v1.1.1) (2021-05-17)
+
+### Code Refactoring
+
+* Remove extra 0
+
 <a name="v1.1.0"></a>
 ## [v1.1.0](https://github.com/WingLim/MicFix/compare/v1.0.2...v1.1.0) (2021-05-17)
 
