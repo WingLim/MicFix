@@ -301,7 +301,7 @@ class MicFix {
         var val: Int32 = 0
         
         let coef0255: [coef] = [
-            writeCoef(0x45, 0x0d089),
+            writeCoef(0x45, 0xd089),
             writeCoef(0x49, 0x0149)
         ]
         
@@ -387,7 +387,7 @@ class MicFix {
         
         let coef0255: [coef] = [
             writeCoef(0x1b, 0x0c0b),
-            writeCoef(0x45, 0x0d089),
+            writeCoef(0x45, 0xd089),
             updateCoefEX(0x57, 0x05, 1<<14, 0),
             writeCoef(0x06, 0x06104),
             writeCoefEX(0x57, 0x03, 0x8aa6)
