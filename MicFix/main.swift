@@ -7,9 +7,16 @@
 
 import Foundation
 
+let version = "1.1.2"
+
 func start() {
-    MicFix().start()
-    RunLoop.current.run()
+    let args = CommandLine.arguments
+    if args.count == 2 && args[1] == "version" {
+        print(version)
+    } else {
+        MicFix().start()
+        RunLoop.current.run()
+    }
 }
 
 start()
