@@ -17,15 +17,35 @@
 
 1. OpenCore 中启用 AppleALC。
 2. 添加 `alcverbs=1` 到 NVRAM->`7C436110-AB2A-4BBB-A880-FE41995C9F82`->`boot-args` 来启用 `alcverbs`。
-3. 下载最新的发布版，并解压。
 
-### 安装
+### 使用 brew（推荐）
+
+#### 安装
+
+```bash
+brew tap winglim/taps
+brew install micfix
+brew services start micfix
+```
+
+#### 卸载
+
+```bash
+brew services stop micfix
+brew uninstall micfix
+```
+
+### 手动
+
+下载最新的发布版，并解压。
+
+#### 安装
 
 ```bash
 bash install.sh
 ```
 
-### 卸载
+#### 卸载
 
 ```bash
 bash install.sh uninstall
@@ -43,6 +63,12 @@ bash install.sh uninstall
 - ALC286
 - ALC288
 - ALC298
+
+## 从源码编译
+
+```bash
+xcodebuild -configuration Debug
+```
 
 ## 感谢
 

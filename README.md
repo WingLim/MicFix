@@ -17,15 +17,35 @@ Note: Requires AppleALC version 1.5.4+ or the patch of commit [61e2bbf](https://
 
 1. Add AppleALC to your OpenCore
 2. Enable `alcverbs` by adding `alcverbs=1` to NVRAM->`7C436110-AB2A-4BBB-A880-FE41995C9F82`->`boot-args`
-3. Download the newest release, unzip it.
 
-### Install
+### Use brew(Recommend)
+
+#### Install
+
+```bash
+brew tap winglim/taps
+brew install micfix
+brew services start micfix
+```
+
+#### Uninstall
+
+```bash
+brew services stop micfix
+brew uninstall micfix
+```
+
+### Manual
+
+Download the newest release, unzip it.
+
+#### Install
 
 ```bash
 bash install.sh
 ```
 
-### Uninsatll
+#### Uninsatll
 
 ```bash
 bash install.sh uninstall
@@ -43,6 +63,12 @@ We would appreciate it if someone could help us test these devices.
 - ALC286
 - ALC288
 - ALC298
+
+## Build From Source
+
+```bash
+xcodebuild -configuration Debug
+```
 
 ## Credits
 
