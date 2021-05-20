@@ -11,8 +11,18 @@ let version = "1.1.2"
 
 func start() {
     let args = CommandLine.arguments
-    if args.count == 2 && args[1] == "version" {
-        print(version)
+    if args.count == 2 {
+        if args[1] == "version" {
+            print(version)
+        } else if args[1] == "help" {
+            let help = """
+            Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
+            usage:
+                Manually: nohup MicFix &
+                brew: brew services start winglim/taps/micfix
+            """
+            print(help)
+        }
     } else {
         MicFix().start()
         RunLoop.current.run()
