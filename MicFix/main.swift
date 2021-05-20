@@ -7,7 +7,7 @@
 
 import Foundation
 
-let version = "1.1.2"
+let version = "1.1.3"
 
 func start() {
     let args = CommandLine.arguments
