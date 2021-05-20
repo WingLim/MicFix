@@ -18,7 +18,7 @@ func start() {
             let help = """
             Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
             usage:
-                Manually: nohup MicFix &
+                manual: nohup MicFix &
                 brew: brew services start winglim/taps/micfix
             """
             print(help)
