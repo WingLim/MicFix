@@ -20,17 +20,13 @@ Note: Requires AppleALC version 1.5.4+ or the patch of commit [61e2bbf](https://
 
 ### Use brew(Recommend)
 
-#### Install
-
 ```bash
+# Install
 brew tap winglim/taps
 brew install micfix
 brew services start micfix
-```
 
-#### Uninstall
-
-```bash
+# Uninstall
 brew services stop micfix
 brew uninstall micfix
 ```
@@ -39,15 +35,11 @@ brew uninstall micfix
 
 Download the newest release, unzip it.
 
-#### Install
-
 ```bash
+# Install
 bash install.sh
-```
 
-#### Uninsatll
-
-```bash
+# Uninstall
 bash install.sh uninstall
 ```
 

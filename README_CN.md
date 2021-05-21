@@ -20,17 +20,13 @@
 
 ### 使用 brew（推荐）
 
-#### 安装
-
 ```bash
+# 安装
 brew tap winglim/taps
 brew install micfix
 brew services start micfix
-```
 
-#### 卸载
-
-```bash
+#卸载
 brew services stop micfix
 brew uninstall micfix
 ```
@@ -39,15 +35,11 @@ brew uninstall micfix
 
 下载最新的发布版，并解压。
 
-#### 安装
-
 ```bash
+# 安装
 bash install.sh
-```
 
-#### 卸载
-
-```bash
+# 卸载
 bash install.sh uninstall
 ```
 
