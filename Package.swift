@@ -1,11 +1,11 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.3
 
 import PackageDescription
 
 let package = Package(
     name: "MicFix",
     targets: [
-        .executableTarget(
+        .target(
             name: "MicFix"
         )
     ]
