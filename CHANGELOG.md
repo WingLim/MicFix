@@ -1,3 +1,22 @@
+<a name="v1.2.0"></a>
+## [v1.2.0](https://github.com/WingLim/MicFix/compare/v1.1.3...v1.2.0) (2021-05-21)
+
+### Code Refactoring
+
+* Rewrite subcommand
+* Use swift package manager
+
+<a name="v1.1.3"></a>
+## [v1.1.3](https://github.com/WingLim/MicFix/compare/v1.1.2...v1.1.3) (2021-05-20)
+
+### Features
+
+* Add help command
+
+### Bug Fixes
+
+* Chagne version output
+
 
 <a name="v1.1.1"></a>
 ## [v1.1.1](https://github.com/WingLim/MicFix/compare/v1.1.0...v1.1.1) (2021-05-17)
