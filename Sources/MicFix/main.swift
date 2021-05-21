@@ -7,26 +7,47 @@
 
 import Foundation
 
-let version = "1.1.3"
+let version = "1.2.0"
 
-func start() {
+func startCommand() {
+    MicFix().start()
+    RunLoop.current.run()
+}
+
+func helpCommand() {
+    let help = """
+    Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
+    
+    usage:
+        MicFix <command>
+    
+    commands:
+        help    Shows help
+        start   Start the MicFix process
+        version Prints the version
+    """
+    print(help)
+}
+
+func cli() {
     let args = CommandLine.arguments
-    if args.count == 2 {
-        if args[1] == "version" {
+    
+    if args.count == 1 {
+        startCommand()
+    } else if args.count == 2 {
+        switch args[1] {
+        case "version":
             print(version)
-        } else if args[1] == "help" {
-            let help = """
-            Fix Headset/Headphone Micphone in Hackintosh with AppleALC.
-            usage:
-                manual: nohup MicFix &
-                brew: brew services start winglim/taps/micfix
-            """
-            print(help)
+        case "help":
+            helpCommand()
+        case "start":
+            startCommand()
+        default:
+            print("Unknown command")
         }
     } else {
-        MicFix().start()
-        RunLoop.current.run()
+        print("Too many arguments")
     }
 }
 
-start()
+cli()
