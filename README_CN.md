@@ -67,7 +67,7 @@ bash install.sh uninstall
 ## 从源码编译
 
 ```bash
-xcodebuild -configuration Debug
+swift build -c debug
 ```
 
 ## 感谢

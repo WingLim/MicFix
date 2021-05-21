@@ -67,7 +67,7 @@ We would appreciate it if someone could help us test these devices.
 ## Build From Source
 
 ```bash
-xcodebuild -configuration Debug
+swift build -c debug
 ```
 
 ## Credits
