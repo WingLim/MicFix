@@ -11,6 +11,19 @@
 - 支持耳机热拔插。
 - 不需要 `CodecCommander`, `hda-verb` 或者 `alc-verb` 来驱动。
 
+## 支持的设备
+
+修复麦克风的 hda-verb 命令来自 [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c)，但因为缺少设备，只有一部分在 MacOS 上测试过。
+
+如果有人能帮忙测试这些设备，我们将会十分感谢。
+
+- ALC236
+- ALC255[已测试]
+- ALC256
+- ALC286
+- ALC288
+- ALC298
+
 ## 使用方法
 
 注意: 需要 AppleALC 1.5.4+ 或者应用了这个 commit [61e2bbf](https://github.com/acidanthera/AppleALC/commit/61e2bbfe74bf1c12ebf770ed4a9776a04a7758f2)。
@@ -42,19 +55,6 @@ bash install.sh
 # 卸载
 bash install.sh uninstall
 ```
-
-## 支持的设备
-
-修复麦克风的 hda-verb 命令来自 [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c)，但因为缺少设备，只有一部分在 MacOS 上测试过。
-
-如果有人能帮忙测试这些设备，我们将会十分感谢。
-
-- ALC236
-- ALC255[已测试]
-- ALC256
-- ALC286
-- ALC288
-- ALC298
 
 ## 从源码编译
 

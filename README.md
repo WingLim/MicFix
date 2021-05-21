@@ -11,6 +11,19 @@ English | [中文](https://github.com/WingLim/MicFix/blob/main/README_CN.md)
 - Supports headset plug/unplug.
 - Doesn't require `CodecCommander`, `hda-verb` or `alc-verb` to function.
 
+## Supported Devices
+
+The hda-verb command comes from [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c), but because of the limited devices, only some of them were tested on MacOS.
+
+We would appreciate it if someone could help us test these devices.
+
+- ALC236
+- ALC255[Tested]
+- ALC256
+- ALC286
+- ALC288
+- ALC298
+
 ## Usage
 
 Note: Requires AppleALC version 1.5.4+ or the patch of commit [61e2bbf](https://github.com/acidanthera/AppleALC/commit/61e2bbfe74bf1c12ebf770ed4a9776a04a7758f2) applied.
@@ -42,19 +55,6 @@ bash install.sh
 # Uninstall
 bash install.sh uninstall
 ```
-
-## Supported Devices
-
-The hda-verb command comes from [patch_realtek.c](https://github.com/torvalds/linux/blob/master/sound/pci/hda/patch_realtek.c), but because of the limited devices, only some of them were tested on MacOS.
-
-We would appreciate it if someone could help us test these devices.
-
-- ALC236
-- ALC255[Tested]
-- ALC256
-- ALC286
-- ALC288
-- ALC298
 
 ## Build From Source
 
