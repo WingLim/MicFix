@@ -28,7 +28,7 @@ jobs:
           version: "12"
       
       - name: Build binary
-        run: xcodebuild archive -scheme ${PROGRAM} -archivePath build
+        run: swift build -c release
 
       - name: Set version
         id: version
@@ -40,7 +40,7 @@ jobs:
           dir=${PROGRAM}-Release-${{ steps.version.outputs.tag }}
           echo ::set-output name=filename::${dir}
           mkdir ${dir}
-          cp build.xcarchive/Products/${PROGRAM} ${dir}
+          cp .build/release/${PROGRAM} ${dir}
           cp scripts/* ${dir}
           zip -r ${dir}.zip ${dir}
       
