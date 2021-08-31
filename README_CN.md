@@ -46,7 +46,7 @@ brew uninstall micfix
 
 ### 手动
 
-下载最新的发布版，并解压。
+下载最新的[发布版](https://github.com/WingLim/MicFix/releases)，并解压。
 
 ```bash
 # 安装

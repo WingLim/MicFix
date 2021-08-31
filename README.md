@@ -46,7 +46,7 @@ brew uninstall micfix
 
 ### Manual
 
-Download the newest release, unzip it.
+Download the newest [release](https://github.com/WingLim/MicFix/releases), unzip it.
 
 ```bash
 # Install
